@@ -17,7 +17,6 @@ const saveNotes = notes => {
 
 const addNote = (title, body) => {
     const notes = loadNotes();
-
     if (notes.filter(x => x.title === title).length > 0) {
         console.log(
             chalk.red.inverse(
@@ -26,7 +25,6 @@ const addNote = (title, body) => {
         );
         return;
     }
-
     notes.push({
         title: title,
         body: body
@@ -37,7 +35,6 @@ const addNote = (title, body) => {
 
 const removeNote = title => {
     const notes = loadNotes();
-
     const index = notes.map(x => x.title).indexOf(title);
     if (index < 0) {
         console.log(
@@ -45,7 +42,6 @@ const removeNote = title => {
         );
         return;
     }
-
     notes.splice(index, 1);
     saveNotes(notes);
     console.log(chalk.green.inverse(`Removed the note titled '${title}'.`));
@@ -64,20 +60,17 @@ const listNotes = () => {
 const readNote = title => {
     const notes = loadNotes();
     const n = notes.find(x => x.title === title);
-
     if (!n) {
         console.log(
             chalk.red.inverse(`There is no note with the title '${title}'.`)
         );
         return;
     }
-
     console.log(chalk.white.inverse(`${title}`));
     console.log(n.body);
 };
 
 module.exports = {
-    getNotes: getNotes,
     addNote: addNote,
     removeNote: removeNote,
     listNotes: listNotes,
