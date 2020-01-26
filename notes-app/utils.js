@@ -1,5 +1,3 @@
-console.log("utils.js");
-
 const name = "kelly";
 
 function add(a, b) {
