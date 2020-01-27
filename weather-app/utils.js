@@ -1,0 +1,46 @@
+const request = require("request");
+const config = require("./config");
+
+const geocode = (location, callback) => {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        location
+    )}.json?access_token=${config.mapBoxAPIKey}&limit=1`;
+    request({ url: url, json: true }, (error, response) => {
+        if (error) {
+            callback("Unable to connect to location service.");
+            return;
+        }
+        if (response.body.features.length === 0) {
+            callback("Unable to find requested location.");
+            return;
+        }
+        callback(undefined, {
+            latitude: response.body.features[0].center[1],
+            longitude: response.body.features[0].center[0],
+            location: response.body.features[0].place_name
+        });
+    });
+};
+
+const forecast = (lat, long, callback) => {
+    const url = `https://api.darksky.net/forecast/${config.darkSkyAPIKey}/${lat},${long}?units=si`;
+    request({ url: url, json: true }, (error, response) => {
+        if (error) {
+            callback("Unable to connect to weather service.");
+            return;
+        }
+        if (response.body.error) {
+            callback("Unable to find requested location.");
+            return;
+        }
+        callback(undefined, {
+            temperature: response.body.currently.temperature,
+            precip: response.body.currently.precipProbability
+        });
+    });
+};
+
+module.exports = {
+    geocode: geocode,
+    forecast: forecast
+};
