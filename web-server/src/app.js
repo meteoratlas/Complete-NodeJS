@@ -1,17 +1,36 @@
 const express = require("express");
+const path = require("path");
+const hbs = require("hbs");
 
 const app = express();
+const publicDirectory = path.join(__dirname, "../public");
+const viewsDirectory = path.join(__dirname, "../templates/views");
+const partialsDirectory = path.join(__dirname, "../templates/partials");
+
+app.set("view engine", "hbs");
+app.set("views", viewsDirectory);
+hbs.registerPartials(partialsDirectory);
+app.use(express.static(publicDirectory));
 
 app.get("", (req, res) => {
-    res.send("<h1>Hello Express</h1>");
+    res.render("index", {
+        title: "Weather Map",
+        name: "Kelly"
+    });
 });
 
 app.get("/help", (req, res) => {
-    res.send({ name: "Help Page Title", helpTopics: 24 });
+    res.render("help", {
+        title: "Help Page",
+        name: "Kelly"
+    });
 });
 
 app.get("/about", (req, res) => {
-    res.send("<h1>About Page</h1>");
+    res.render("about", {
+        title: "About Page",
+        name: "Kelly"
+    });
 });
 
 app.get("/weather", (req, res) => {
