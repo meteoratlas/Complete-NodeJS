@@ -7,11 +7,11 @@ const geocode = (location, callback) => {
     )}.json?access_token=${config.mapBoxAPIKey}&limit=1`;
     request({ url: url, json: true }, (error, response) => {
         if (error) {
-            callback("Unable to connect to location service.");
+            callback({ error: "Unable to connect to location service." });
             return;
         }
         if (response.body.features.length === 0) {
-            callback("Unable to find the requested location.");
+            callback({ error: "Unable to find the requested location." });
             return;
         }
         callback(undefined, {
@@ -26,12 +26,14 @@ const forecast = (lat, long, callback) => {
     const url = `https://api.darksky.net/forecast/${config.darkSkyAPIKey}/${lat},${long}?units=si`;
     request({ url: url, json: true }, (error, response) => {
         if (error) {
-            callback("Unable to connect to weather service.");
+            callback({ error: "Unable to connect to weather service." });
             return;
         }
 
         if (response.body.error) {
-            callback("Unable to find weather for the requested location.");
+            callback({
+                error: "Unable to find weather for the requested location."
+            });
             return;
         }
 
