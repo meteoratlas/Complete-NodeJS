@@ -29,21 +29,29 @@ const forecast = (lat, long, callback) => {
             callback({ error: "Unable to connect to weather service." });
             return;
         }
+        const body = response.body;
 
-        if (response.body.error) {
+        if (body.error) {
             callback({
                 error: "Unable to find weather for the requested location."
             });
             return;
         }
 
+        if (!body.daily.data[0].summary) {
+            callback({
+                error:
+                    "No weather report is available for the requested location."
+            });
+            return;
+        }
         callback(
             undefined,
-            response.body.daily.data[0].summary +
+            body.daily.data[0].summary +
                 " It is currently " +
-                response.body.currently.temperature +
-                " degress out. There is a " +
-                response.body.currently.precipProbability +
+                body.currently.temperature +
+                " degrees out. There is a " +
+                body.currently.precipProbability +
                 "% chance of rain."
         );
     });
