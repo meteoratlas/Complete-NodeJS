@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
+const utils = require("./utils");
 
 const app = express();
 const publicDirectory = path.join(__dirname, "../public");
@@ -34,7 +35,28 @@ app.get("/about", (req, res) => {
 });
 
 app.get("/weather", (req, res) => {
-    res.send({ location: "Your City", temperate: 4.02 });
+    if (!req.query.address) {
+        return res.send({ error: "You must provide an address." });
+    }
+    utils.geocode(
+        req.query.address,
+        (error, { latitude, longitude, location }) => {
+            if (error) {
+                return res.send(error);
+            }
+            utils.forecast(latitude, longitude, (error, forecastData) => {
+                if (error) {
+                    return res.send(error);
+                }
+
+                res.send({
+                    forecast: forecastData,
+                    location,
+                    address: req.query.address
+                });
+            });
+        }
+    );
 });
 
 app.get("/help/*", (req, res) => {
@@ -43,6 +65,13 @@ app.get("/help/*", (req, res) => {
         title: "404",
         name: "Kelly"
     });
+});
+
+app.get("/products", (req, res) => {
+    if (!req.query.search) {
+        return res.send({ error: "You must provide a search term." });
+    }
+    res.send({ products: [] });
 });
 
 app.get("*", (req, res) => {

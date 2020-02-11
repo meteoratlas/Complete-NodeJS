@@ -11,7 +11,7 @@ const geocode = (location, callback) => {
             return;
         }
         if (response.body.features.length === 0) {
-            callback("Unable to find requested location.");
+            callback("Unable to find the requested location.");
             return;
         }
         callback(undefined, {
@@ -30,7 +30,7 @@ const forecast = (lat, long, callback) => {
             return;
         }
         if (response.body.error) {
-            callback("Unable to find requested location.");
+            callback("Unable to find weather for the requested location.");
             return;
         }
         callback(undefined, {

@@ -11,7 +11,7 @@ const geocode = (location, callback) => {
             return;
         }
         if (response.body.features.length === 0) {
-            callback("Unable to find requested location.");
+            callback("Unable to find the requested location.");
             return;
         }
         callback(undefined, {
@@ -29,14 +29,21 @@ const forecast = (lat, long, callback) => {
             callback("Unable to connect to weather service.");
             return;
         }
+
         if (response.body.error) {
-            callback("Unable to find requested location.");
+            callback("Unable to find weather for the requested location.");
             return;
         }
-        callback(undefined, {
-            temperature: response.body.currently.temperature,
-            precip: response.body.currently.precipProbability
-        });
+
+        callback(
+            undefined,
+            response.body.daily.data[0].summary +
+                " It is currently " +
+                response.body.currently.temperature +
+                " degress out. There is a " +
+                response.body.currently.precipProbability +
+                "% chance of rain."
+        );
     });
 };
 
