@@ -13,8 +13,13 @@ socket.on("sendMessage", msg => {
 sendButton.addEventListener("click", () => {
     const msg = chatInput.value;
     chatInput.value = "";
+    chatInput.focus();
+    if (!msg) return;
+
+    sendButton.setAttribute("disabled", "disabled");
 
     socket.emit("onSendMessage", msg, error => {
+        sendButton.removeAttribute("disabled");
         if (error) console.log(error);
     });
 });
