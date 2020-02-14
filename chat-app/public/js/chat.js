@@ -14,5 +14,21 @@ sendButton.addEventListener("click", () => {
     const msg = chatInput.value;
     chatInput.value = "";
 
-    socket.emit("onSendMessage", msg);
+    socket.emit("onSendMessage", msg, error => {
+        if (error) console.log(error);
+    });
 });
+
+// Location Sharing
+// (TODO later, maybe (seems unnecessary to me right now))
+
+// document
+//     .querySelector("#share-location-button")
+//     .addEventListener("click", () => {
+//         if (!navigator.geolocation) {
+//             return alert("Geolocation is not supported in this browser.");
+//         }
+//         navigator.geolocation.getCurrentPosition(position => {
+//             console.log(position);
+//         });
+//     });
